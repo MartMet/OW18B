@@ -83,7 +83,7 @@ namespace OW18B.Pages
             };
 
             // Initialize and start the timer
-            timer = new System.Timers.Timer(500); // Set timer interval to 400 milliseconds
+            timer = new System.Timers.Timer(500);
             timer.Elapsed += TimerElapsed;
             timer.AutoReset = true; 
             timer.Start();
@@ -134,6 +134,15 @@ namespace OW18B.Pages
             if (characteristicWrite != null)
             {
                 characteristicWrite.WriteValueWithResponse(new byte[] { 03, 01 });
+                //QnD enable or disable chart update timer, if device is on 'hold'
+                if(timer.Enabled)
+                {
+                    timer.Stop();
+                }
+                else
+                {
+                    timer.Start();
+                }
             }
         }
 
