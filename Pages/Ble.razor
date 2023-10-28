@@ -1,0 +1,134 @@
+﻿@page "/ble"
+<PageTitle>Index</PageTitle>
+<h3>OW18B Bluetooth Multimeter Web Application</h3>
+
+<div class="container">
+    <div class="container_h">
+        <button @onclick="ConnectAsync" class="equal-width-button">Connect</button>
+
+        <button @onclick="DisconnectAsync" class="equal-width-button">Disconnect</button>
+       
+    </div>
+    <div class="container_h">
+        <div class="calculator-display equal-width-display">
+            @formattedStringMode
+        </div>
+
+        <div class="calculator-display equal-width-display">
+            @formattedStringValue
+        </div>
+        <div class="input-container">
+            <label for="MaxNumber">Max. Plot Points:</label>
+            <input type="number" id="MaxNumber" @bind="MaxNumber" class="form-control equal-width-input" min="10" max="10000">
+        </div>
+        
+        
+    </div>
+
+    <div class="rectangle">
+        <div class="corner top-left">
+            <CustomButton Text="Select" OnPointerShort="Select" OnPointerLong="Select2nd" ></CustomButton>
+        </div>
+        <div class="corner top-right">
+            <CustomButton Text="Hold/Light" OnPointerShort="Hold" OnPointerLong="Light" ></CustomButton>
+        </div>
+        <div class="corner bottom-left">
+            <CustomButton Text="Range" OnPointerShort="Ranger" OnPointerLong="Ranger2nd" ></CustomButton>
+        </div>
+        <div class="corner bottom-right">
+            <CustomButton Text="Hz/Duty" OnPointerShort="HzDuty" ></CustomButton>
+        </div>
+    </div>
+
+    <PlotlyChart style="width: 100%" @bind-Config="config" @bind-Layout="layout" @bind-Data="data" @ref="chart" />
+
+</div>
+
+<style>
+    .rectangle {
+        position: relative;
+        width: 100%;
+        height: 150px;
+        margin: 10px 0;
+    }
+
+    .corner {
+        position: absolute;
+        width: 25%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .top-left {
+        top: 0;
+        left: 0;
+    }
+
+    .top-right {
+        top: 0;
+        right: 0;
+    }
+
+    .bottom-left {
+        bottom: 0;
+        left: 0;
+    }
+
+    .bottom-right {
+        bottom: 0;
+        right: 0;
+    }
+
+    .input-container {
+        display: flex;
+        flex-direction: column; /* Display the label and input in a column */
+        align-items: center; /* Center horizontally */
+        margin: 5px;
+    }
+
+    .calculator-display {
+        font-family: 'Digital-7 Mono', monospace;
+        font-size: 32px;
+        background-color: white;
+        color: black;
+        padding: 10px;
+        border: 2px solid black;
+        width: 100%;
+        height: 70px;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container_h {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin: 10px 0;
+    }
+
+    .equal-width-button,
+    .equal-width-input,
+    .equal-width-display {
+        flex: 1;
+        margin: 5px;
+    }
+
+    .equal-width-display {
+        min-width: 180px;
+    }
+
+    button,
+    .corner CustomButton {
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        button:hover,
+        .corner CustomButton:hover {
+            background-color: #00DD00;
+            color: #fff;
+        }
+</style>

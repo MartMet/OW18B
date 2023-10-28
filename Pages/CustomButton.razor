@@ -1,0 +1,68 @@
+﻿@using System.Timers
+<style>
+    /* Component-specific CSS rules */
+    .custom-button {
+        width: 200px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: dodgerblue;
+        color: white;
+        border: 2px solid dodgerblue;
+        cursor: pointer;
+        user-select: none; /* Prevent text selection */
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.2s ease-in-out;
+        margin: 10px;
+    }
+
+        .custom-button:hover {
+            background-color: #007acc;
+        }
+</style>
+
+<div class="custom-button" @onpointerdown="PointerDown" @onpointerup="PointerUp">
+    <span>@Text</span>
+</div>
+
+@code {
+    [Parameter] public string Text { get; set; } = "Click me"; // Default text
+    [Parameter] public EventCallback OnPointerLong { get; set; }
+    [Parameter] public EventCallback OnPointerShort { get; set; }
+
+
+    private Timer timer;
+
+    public void PointerDown()
+    {
+        // Initialize and start the timer
+        timer = new Timer(400); // Set timer interval to 400 milliseconds
+        timer.Elapsed += TimerElapsed;
+        timer.AutoReset = false; // Ensure it runs only once
+        timer.Start();
+    }
+
+    public void PointerUp()
+    {
+        if (timer.Enabled)
+        {
+            timer?.Stop(); // Stop the timer if it's running
+
+            if (OnPointerShort.HasDelegate)
+            {
+                OnPointerShort.InvokeAsync();
+            }
+        }
+    }
+
+    private void TimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        if (OnPointerLong.HasDelegate)
+        {
+            OnPointerLong.InvokeAsync();
+        }
+    }
+}
+
